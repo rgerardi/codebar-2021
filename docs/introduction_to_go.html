@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://127.0.0.1:3999/preso.slide#1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Introduction to Go</title>
+    
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src="./introduction_to_go_files/slides.js"></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  <script data-dapp-detection="">!function(){let e=!1;function n(){if(!e){const n=document.createElement("meta");n.name="dapp-detected",document.head.appendChild(n),e=!0}}if(window.hasOwnProperty("ethereum")){if(window.__disableDappDetectionInsertion=!0,void 0===window.ethereum)return;n()}else{var t=window.ethereum;Object.defineProperty(window,"ethereum",{configurable:!0,enumerable:!1,set:function(e){window.__disableDappDetectionInsertion||n(),t=e},get:function(){if(!window.__disableDappDetectionInsertion){const e=arguments.callee;e&&e.caller&&e.caller.toString&&-1!==e.caller.toString().indexOf("getOwnPropertyNames")||n()}return t}})}}();</script><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+  <body style="display: none" class="loaded">
+
+    <section class="slides layout-widescreen" style="transform: scale(0.897333);">
+
+      <article class="background current" style="background-image: url(&#39;images/title-back.png&#39;)">
+        <h1>Introduction to Go</h1>
+        
+        <h3>24 June 2021</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Ricardo Gerardi
+  </p>
+  
+
+  
+  <p>
+    Powerful Command-Line Applications in Go, Author
+  </p>
+  
+
+  
+  <p>
+    Senior Automation Consultant, Red Hat
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article class="background next" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Why Go</h3>
+        
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+
+
+<div class="row">
+  <div class="column">
+    <ul type="dash">
+      <li>Concise</li>
+      <li>Reliability of statically typed languages with flexibility of dynamic languages</li>
+      <li>No runtime dependencies</li>
+      <li>Rapid prototyping</li>
+      <li>Built-in concurrency</li>
+      <li>Multiplatform and cross compilation</li>
+    </ul>
+  </div>
+  <div class="column">
+    <img src="./introduction_to_go_files/gopher.svg" alt="Go Gopher" width="80%">
+  </div>
+</div>
+
+
+
+<figcaption><i>Go</i> <i>Gopher</i> (CC BY 3.0) original design by <a href="http://reneefrench.blogspot.com/" target="_blank">Renee French</a></figcaption>
+      
+      <span class="pagenumber">2</span>
+      </article>
+  
+  
+  
+      <article class="background far-next" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Hello Crypto World</h3>
+        
+  <div class="code playground">
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "io"</span>
+<span num="6">    "net/http"</span>
+<span num="7">    "os"</span>
+<span num="8">)</span>
+<span num="9"></span>
+<span num="10">func main() {</span>
+<span num="11">    symbol := "btc"</span>
+<span num="12">    url := fmt.Sprintf("https://data.messari.io/api/v1/assets/%s/metrics/market-data", symbol)</span>
+<span num="13"></span>
+<span num="14">    res, err := http.Get(url)</span>
+<span num="15">    if err != nil {</span>
+<span num="16">        fmt.Println(err)</span>
+<span num="17">        os.Exit(1)</span>
+<span num="18">    }</span>
+<span num="19">    defer res.Body.Close()</span>
+<span num="20"></span>
+<span num="21">    io.Copy(os.Stdout, res.Body)</span>
+<span num="22">}</span>
+</pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+<figcaption>Powered by <a href="http://messari.io/" target="_blank">Messari</a></figcaption>
+      
+      <span class="pagenumber">3</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Creating a Package</h3>
+        
+  <div class="code">
+<pre><span num="1"><b>package crypto</b></span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "encoding/json"</span>
+<span num="5">    "fmt"</span>
+<span num="6">    "net/http"</span>
+<span num="7">)</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">4</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Struct Tags</h3>
+        
+  <div class="code">
+<pre><span num="9">type Crypto struct {</span>
+<span num="10">    Data struct {</span>
+<span num="11">        Symbol     string `json:"symbol"`</span>
+<span num="12">        Name       string `json:"name"`</span>
+<span num="13">        MarketData struct {</span>
+<span num="14">            <b>PriceUSD float64 `json:"price_usd"`</b></span>
+<span num="15">        } `json:"market_data"`</span>
+<span num="16">    } `json:"data"`</span>
+<span num="17">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">5</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Interfaces</h3>
+        
+  <div class="code">
+<pre><span num="19">func (c *Crypto) String() string {</span>
+<span num="20">    return fmt.Sprintf("%s (%s): $ %.2f", c.Data.Name, c.Data.Symbol, c.Data.MarketData.PriceUSD)</span>
+<span num="21">}</span>
+</pre>
+</div>
+<p>Implementing Stringer interface from fmt package:</p>
+
+  <div class="code">
+<pre><span num="57">// Stringer is implemented by any value that has a String method,</span>
+<span num="58">// which defines the ``native'' format for that value.</span>
+<span num="59">// The String method is used to print values passed as an operand</span>
+<span num="60">// to any format that accepts a string or to an unformatted printer</span>
+<span num="61">// such as Print.</span>
+<span num="62">type Stringer interface {</span>
+<span num="63">    String() string</span>
+<span num="64">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">6</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Decoding JSON</h3>
+        
+  <div class="code">
+<pre><span num="23">func GetCrypto(symbol string) (*Crypto, error) {</span>
+<span num="24">    url := fmt.Sprintf("https://data.messari.io/api/v1/assets/%s/metrics/market-data", symbol)</span>
+<span num="25"></span>
+<span num="26">    res, err := http.Get(url)</span>
+<span num="27">    if err != nil {</span>
+<span num="28">        return nil, fmt.Errorf("Cannot get crypto: %s", err)</span>
+<span num="29">    }</span>
+<span num="30"></span>
+<span num="31">    defer res.Body.Close()</span>
+<span num="32"></span>
+<span num="33">    c := &amp;Crypto{}</span>
+<span num="34"></span>
+<span num="35">    <b>err = json.NewDecoder(res.Body).Decode(c)</b></span>
+<span num="36"></span>
+<span num="37">    return c, err</span>
+<span num="38">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">7</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Using the New Package</h3>
+        
+  <div class="code playground">
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "os"</span>
+<span num="6"></span>
+<span num="7">    <b>"github.com/rgerardi/codebar-2021/crypto"</b></span>
+<span num="8">)</span>
+<span num="9"></span>
+<span num="10">func main() {</span>
+<span num="11">    symbol := "btc"</span>
+<span num="12"></span>
+<span num="13">    <b>c, err := crypto.GetCrypto(symbol)</b></span>
+<span num="14">    if err != nil {</span>
+<span num="15">        fmt.Println(err)</span>
+<span num="16">        os.Exit(1)</span>
+<span num="17">    }</span>
+<span num="18"></span>
+<span num="19">    fmt.Println(c)</span>
+<span num="20">}</span>
+</pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">8</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Input Arguments / Slices</h3>
+        
+  <div class="code playground">
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "os"</span>
+<span num="6"></span>
+<span num="7">    "github.com/rgerardi/codebar-2021/crypto"</span>
+<span num="8">)</span>
+<span num="9"></span>
+<span num="10">func main() {</span>
+<span num="11">    //    symbols := os.Args[1:] // For command line tools</span>
+<span num="12">    symbols := []string{"btc"} // To execute on slides</span>
+<span num="13"></span>
+<span num="14">    c, err := crypto.GetCrypto(symbols[0])</span>
+<span num="15">    if err != nil {</span>
+<span num="16">        fmt.Println(err)</span>
+<span num="17">        os.Exit(1)</span>
+<span num="18">    }</span>
+<span num="19"></span>
+<span num="20">    fmt.Println(c)</span>
+<span num="21">}</span>
+</pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">9</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Loops</h3>
+        
+  <div class="code playground">
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "os"</span>
+<span num="6"></span>
+<span num="7">    "github.com/rgerardi/codebar-2021/crypto"</span>
+<span num="8">)</span>
+<span num="9"></span>
+<span num="10">func main() {</span>
+<span num="11">    symbols := []string{"btc", "eth", "ltc", "dot", "pol", "bch"}</span>
+<span num="12"></span>
+<span num="13">    <b>for _, symbol := range symbols {</b></span>
+<span num="14">        c, err := crypto.GetCrypto(symbol)</span>
+<span num="15">        if err != nil {</span>
+<span num="16">            fmt.Println(err)</span>
+<span num="17">            os.Exit(1)</span>
+<span num="18">        }</span>
+<span num="19"></span>
+<span num="20">        fmt.Println(c)</span>
+<span num="21">    }</span>
+<span num="22">}</span>
+</pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">10</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Total Time</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/rgerardi/codebar-2021/crypto"
+)
+
+</span></pre><pre><span num="11">func main() {</span>
+<span num="12">    symbols := []string{"btc", "eth", "ltc", "dot", "pol", "bch"}</span>
+<span num="13"></span>
+<span num="14">    start := time.Now()</span>
+<span num="15">    for _, symbol := range symbols {</span>
+<span num="16">        printCryptoPrice(symbol)</span>
+<span num="17">    }</span>
+<span num="18"></span>
+<span num="19">    fmt.Println()</span>
+<span num="20">    fmt.Println("Total time:", time.Since(start))</span>
+<span num="21">}</span>
+</pre>
+<pre style="display: none"><span>
+func printCryptoPrice(symbol string) {
+	c, err := crypto.GetCrypto(symbol)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(c)
+}
+</span></pre></div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+  <div class="code">
+<pre><span num="23">func printCryptoPrice(symbol string) {</span>
+<span num="24">    c, err := crypto.GetCrypto(symbol)</span>
+<span num="25">    if err != nil {</span>
+<span num="26">        fmt.Println(err)</span>
+<span num="27">        os.Exit(1)</span>
+<span num="28">    }</span>
+<span num="29"></span>
+<span num="30">    fmt.Println(c)</span>
+<span num="31">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">11</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Concurrency - goroutines</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/rgerardi/codebar-2021/crypto"
+)
+
+</span></pre><pre><span num="11">func main() {</span>
+<span num="12">    symbols := []string{"btc", "eth", "ltc", "dot", "pol", "bch"}</span>
+<span num="13"></span>
+<span num="14">    start := time.Now()</span>
+<span num="15">    for _, symbol := range symbols {</span>
+<span num="16">        <b>go printCryptoPrice(symbol)</b></span>
+<span num="17">    }</span>
+<span num="18"></span>
+<span num="19">    fmt.Println()</span>
+<span num="20">    fmt.Println("Total time:", time.Since(start))</span>
+<span num="21">}</span>
+</pre>
+<pre style="display: none"><span>
+func printCryptoPrice(symbol string) {
+	c, err := crypto.GetCrypto(symbol)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	fmt.Println(c)
+}
+</span></pre></div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">12</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Concurrency Channels 1/2</h3>
+        
+  <div class="code">
+<pre><span num="29"><b>func fetchCryptoPrice(symbol string, crchan chan&lt;- *crypto.Crypto) {</b></span>
+<span num="30">    c, err := crypto.GetCrypto(symbol)</span>
+<span num="31">    if err != nil {</span>
+<span num="32">        fmt.Println(err)</span>
+<span num="33">        os.Exit(1)</span>
+<span num="34">    }</span>
+<span num="35"></span>
+<span num="36">    <b>crchan &lt;- c</b></span>
+<span num="37">}</span>
+</pre>
+</div>
+
+  <div class="code">
+<pre><span num="39">func printCryptoPrice(c *crypto.Crypto) {</span>
+<span num="40">    fmt.Println(c)</span>
+<span num="41">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">13</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Concurrency Channels 2/2</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/rgerardi/codebar-2021/crypto"
+)
+
+</span></pre><pre><span num="11">func main() {</span>
+<span num="12">    symbols := []string{"btc", "eth", "ltc", "dot", "pol", "bch"}</span>
+<span num="13"></span>
+<span num="14">    <b>crchan := make(chan *crypto.Crypto)</b></span>
+<span num="15"></span>
+<span num="16">    start := time.Now()</span>
+<span num="17">    for _, symbol := range symbols {</span>
+<span num="18">        <b>go fetchCryptoPrice(symbol, crchan)</b></span>
+<span num="19">    }</span>
+<span num="20"></span>
+<span num="21">    for range symbols {</span>
+<span num="22">        <b>printCryptoPrice(&lt;-crchan)</b></span>
+<span num="23">    }</span>
+<span num="24"></span>
+<span num="25">    fmt.Println()</span>
+<span num="26">    fmt.Println("Total time:", time.Since(start))</span>
+<span num="27">}</span>
+</pre>
+<pre style="display: none"><span>
+func fetchCryptoPrice(symbol string, crchan chan&lt;- *crypto.Crypto) { // HL
+	c, err := crypto.GetCrypto(symbol)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	crchan &lt;- c // HL
+}
+
+func printCryptoPrice(c *crypto.Crypto) {
+	fmt.Println(c)
+}
+</span></pre></div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">14</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Cross-Compilation</h3>
+        <p>Compiling for Linux:</p>
+<pre><code>$ go build -o crypto
+$ file crypto
+crypto: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), ...
+</code></pre>
+<p>Cross-Compiling for macOS:</p>
+<pre><code>$ CGO_ENABLED=0 GOOS=darwin go build -o crypto
+$ file crypto
+crypto: Mach-O 64-bit x86_64 executable</code></pre>
+
+      
+      <span class="pagenumber">15</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>io.Writer Interface</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"io"
+	"os"
+	"time"
+
+	"github.com/rgerardi/codebar-2021/crypto"
+)
+
+</span></pre><pre><span num="12">func main() {</span>
+<span num="13">    symbols := []string{"btc", "eth", "ltc", "dot", "pol", "bch"}</span>
+<span num="14"></span>
+<span num="15">    crchan := make(chan *crypto.Crypto)</span>
+<span num="16"></span>
+<span num="17">    start := time.Now()</span>
+<span num="18">    for _, symbol := range symbols {</span>
+<span num="19">        go fetchCryptoPrice(symbol, crchan)</span>
+<span num="20">    }</span>
+<span num="21"></span>
+<span num="22">    for range symbols {</span>
+<span num="23">        <b>printCryptoPrice(os.Stdout, &lt;-crchan)</b></span>
+<span num="24">    }</span>
+<span num="25"></span>
+<span num="26">    fmt.Println()</span>
+<span num="27">    fmt.Println("Total time:", time.Since(start))</span>
+<span num="28">}</span>
+</pre>
+<pre style="display: none"><span>
+func fetchCryptoPrice(symbol string, crchan chan&lt;- *crypto.Crypto) {
+	c, err := crypto.GetCrypto(symbol)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	crchan &lt;- c
+}
+
+func printCryptoPrice(out io.Writer, c *crypto.Crypto) { // HL
+	fmt.Fprintln(out, c) // HL
+}
+</span></pre></div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+  <div class="code">
+<pre><span num="40"><b>func printCryptoPrice(out io.Writer, c *crypto.Crypto) {</b></span>
+<span num="41">    <b>fmt.Fprintln(out, c)</b></span>
+<span num="42">}</span>
+</pre>
+</div>
+
+      
+      <span class="pagenumber">16</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Web Application</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+
+	"github.com/rgerardi/codebar-2021/crypto"
+)
+
+</span></pre><pre><span num="14">func main() {</span>
+<span num="15">    <b>http.HandleFunc("/prices", func(w http.ResponseWriter, r *http.Request) {</b></span>
+<span num="16">        <b>symbols := strings.Split(r.URL.Query().Get("symbols"), ",")</b></span>
+<span num="17"></span>
+<span num="18">        crchan := make(chan *crypto.Crypto)</span>
+<span num="19">        start := time.Now()</span>
+<span num="20">        for _, symbol := range symbols {</span>
+<span num="21">            go fetchCryptoPrice(symbol, crchan)</span>
+<span num="22">        }</span>
+<span num="23">        for range symbols {</span>
+<span num="24">            <b>printCryptoPrice(w, &lt;-crchan)</b></span>
+<span num="25">        }</span>
+<span num="26"></span>
+<span num="27">        fmt.Println()</span>
+<span num="28">        fmt.Println("Total time:", time.Since(start))</span>
+<span num="29">    })</span>
+<span num="30"></span>
+<span num="31">    fmt.Println("Starting web server on port :4000")</span>
+<span num="32">    <b>if err := http.ListenAndServe(":4000", nil); err != nil {</b></span>
+<span num="33">        fmt.Println("Cannot start server:", err)</span>
+<span num="34">        os.Exit(1)</span>
+<span num="35">    }</span>
+<span num="36">}</span>
+</pre>
+<pre style="display: none"><span>
+func fetchCryptoPrice(symbol string, crchan chan&lt;- *crypto.Crypto) {
+	c, err := crypto.GetCrypto(symbol)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	crchan &lt;- c
+}
+
+func printCryptoPrice(out io.Writer, c *crypto.Crypto) {
+	fmt.Fprintln(out, c)
+}
+</span></pre></div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      <span class="pagenumber">17</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Using the Web Application</h3>
+        <hr>
+<pre><code>$ curl http://localhost:4000/prices?symbols=btc,eth,ltc
+Ethereum (ETH): $ 2016.58
+Litecoin (LTC): $ 129.72
+Bitcoin (BTC): $ 34115.73</code></pre>
+
+      
+      <span class="pagenumber">18</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Learn More</h3>
+        <p class="link"><a href="https://tour.golang.org/" target="_blank">tour.golang.org/</a></p><p class="link"><a href="https://play.golang.org/" target="_blank">play.golang.org/</a></p><p class="link"><a href="https://golang.org/doc/" target="_blank">golang.org/doc/</a></p><p class="link"><a href="https://golang.org/doc/#get-started-tutorial" target="_blank">golang.org/doc/#get-started-tutorial</a></p><p class="link"><a href="https://golang.org/doc/effective_go" target="_blank">golang.org/doc/effective_go</a></p>
+      
+      <span class="pagenumber">19</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Powerful Command-Line Applications in Go</h3>
+        
+<div class="image">
+  <img src="./introduction_to_go_files/rggo.jpg" width="300">
+</div>
+<p class="link"><a href="https://pragprog.com/titles/rggo/powerful-command-line-applications-in-go/" target="_blank">pragprog.com/titles/rggo/powerful-command-line-applications-in-go/</a></p><p>Use promo code <strong>LF2021</strong> for 30% discount (until Jun 26, 2021)</p>
+
+      
+      <span class="pagenumber">20</span>
+      </article>
+  
+  
+  
+      <article class="background" style="background-image: url(&#39;images/slide-back.png&#39;)">
+      
+        <h3>Summary</h3>
+        <ul>
+<li>Go is concise yet powerful</li>
+<li>Go is fast</li>
+<li>Go has great community support and tooling</li>
+<li>Go is productive</li>
+<li>Go is fun !</li>
+</ul>
+
+      
+      <span class="pagenumber">21</span>
+      </article>
+  
+  
+
+      <article class="background" style="background-image: url(&#39;images/title-back.png&#39;)">
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Ricardo Gerardi
+  </p>
+  
+
+  
+  <p>
+    Powerful Command-Line Applications in Go, Author
+  </p>
+  
+
+  
+  <p>
+    Senior Automation Consultant, Red Hat
+  </p>
+  
+<p class="link"><a href="http://twitter.com/ricardogerardi" target="_blank">@ricardogerardi</a></p>
+          </div>
+        
+      </article>
+
+    <div class="slide-area" id="prev-slide-area"></div><div class="slide-area" id="next-slide-area"></div></section>
+
+    <div id="help" style="display: none;">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    <script src="./introduction_to_go_files/play.js"></script>
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  
+
+<link rel="stylesheet" type="text/css" href="./introduction_to_go_files/css"><link rel="stylesheet" type="text/css" href="./introduction_to_go_files/styles.css"></body></html>

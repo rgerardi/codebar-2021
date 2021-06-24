@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 20px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+</head>
+<body>
+
+<div class="row">
+  <div class="column">
+    <ul type="dash">
+      <li>Concise</li>
+      <li>Reliability of statically typed languages with flexibility of dynamic languages</li>
+      <li>No runtime dependencies</li>
+      <li>Rapid prototyping</li>
+      <li>Built-in concurrency</li>
+      <li>Multiplatform and cross compilation</li>
+    </ul>
+  </div>
+  <div class="column">
+    <img src="../images/gopher.svg" alt="Go Gopher" width="80%">
+  </div>
+</div>
+
+</body>
+</html>
